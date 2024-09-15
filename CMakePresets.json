@@ -1,0 +1,110 @@
+﻿{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "windows-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/Build/${presetName}",
+            "installDir": "${sourceDir}/Install/${presetName}",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl",
+                "CMAKE_CXX_COMPILER": "cl"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [ "Windows" ]
+                }
+            }
+        },
+        {
+            "name": "msvc-x86_x64-windows-debug",
+            "displayName": "Windows x64 Debug",
+            "inherits": "windows-base",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+				"CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG": "."
+            }
+        },
+        {
+            "name": "msvc-x86_x64-windows-release",
+            "displayName": "Windows x64 Release",
+            "inherits": "msvc-x86_x64-windows-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+				"CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE": "."
+            }
+        },
+        {
+            "name": "clang-ninja-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/Build/${presetName}",
+            "installDir": "${sourceDir}/Install/${presetName}",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "ninja-x86_x64-clang-debug",
+            "displayName": "Clang x64 Debug",
+            "inherits": "clang-ninja-base",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "ninja-x86_x64-clang-release",
+            "displayName": "Clang x64 Release",
+            "inherits": "ninja-x86_x64-clang-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "clang-make-base",
+            "hidden": true,
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/Build/${presetName}",
+            "installDir": "${sourceDir}/Install/${presetName}",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "make-x86_x64-clang-debug",
+            "displayName": "Clang Make x64 Debug",
+            "inherits": "clang-make-base",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "make-x86_x64-clang-release",
+            "displayName": "Clang Make x64 Release",
+            "inherits": "make-x86_x64-clang-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ]
+}

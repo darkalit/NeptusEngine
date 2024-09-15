@@ -1,0 +1,11 @@
+[submodule "Neptus/External/SDL"]
+	path = Neptus/External/SDL
+	url = https://github.com/libsdl-org/SDL.git
+	branch = release-2.30.x
+[submodule "Neptus/External/glm"]
+	path = Neptus/External/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "Neptus/External/entt"]
+	path = Neptus/External/entt
+	url = https://github.com/skypjack/entt.git
+	branch = v3.13.x

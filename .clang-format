@@ -1,0 +1,14 @@
+# Format Style Options - Created with Clang Power Tools
+---
+AccessModifierOffset: -4
+AllowShortFunctionsOnASingleLine: Inline
+AlwaysBreakTemplateDeclarations: Yes
+BasedOnStyle: LLVM
+BreakConstructorInitializers: BeforeComma
+BreakBeforeInheritanceComma: true
+BreakAfterJavaFieldAnnotations: true
+ColumnLimit: 80
+IndentWidth: 4
+PointerAlignment: Left
+TabWidth: 4
+...
