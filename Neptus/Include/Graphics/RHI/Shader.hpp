@@ -12,7 +12,7 @@
 
 namespace Neptus {
 namespace Graphics {
-enum class NP_API ShaderType : u16 {
+enum class ShaderType : u16 {
     VERTEX,
     FRAGMENT,
     GEOMETRY,

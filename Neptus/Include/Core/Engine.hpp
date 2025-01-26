@@ -7,7 +7,7 @@
 #include "Utils/ResourceManager.hpp"
 
 namespace Neptus {
-class Engine {
+class NP_API Engine {
 public:
     Engine();
     virtual ~Engine() = default;

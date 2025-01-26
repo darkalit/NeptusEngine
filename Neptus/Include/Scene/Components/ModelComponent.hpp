@@ -10,11 +10,11 @@ namespace Components {
 class NP_API ModelComponent : public BaseComponent {
     COMPONENT(ModelComponent)
 public:
-    ModelComponent(Graphics::Model* model) {
+    ModelComponent(const SharedPtr<Graphics::Model>& model) {
         Model = model;
     }
 
-    Graphics::Model* Model;
+    SharedPtr<Graphics::Model> Model;
 };
 } // namespace Components
 } // namespace Neptus

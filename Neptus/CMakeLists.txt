@@ -76,8 +76,8 @@ if (${NEPTUS_BUILD_RENDERSYSTEM_GL})
 endif()
 message(STATUS "Engine Sources: ${ENGINE_SOURCES}")
 
-
-if (${NEPTUS_RUNTIME_SHARED})
+message(STATUS "Engine is shared: ${NEPTUS_SHARED}")
+if (${NEPTUS_SHARED})
     add_library(${PROJECT_NAME} SHARED ${ENGINE_SOURCES})
     add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
@@ -94,6 +94,7 @@ if (${NEPTUS_RUNTIME_SHARED})
         PROPERTIES VERSION ${PROJECT_VERSION}
         PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR}
         PROPERTIES PUBLIC_HEADER ${ENGINE_INCLUDE_DIR}/NeptusEngine.hpp)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE NEPTUS_ENGINE_EXPORTS)
 else()
     add_library(${PROJECT_NAME} STATIC ${ENGINE_SOURCES})
 endif()

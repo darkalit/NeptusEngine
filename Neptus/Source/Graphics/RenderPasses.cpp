@@ -12,14 +12,27 @@ namespace Graphics {
 RenderPasses::RenderPasses(u32 width, u32 height)
     : m_Width(width)
     , m_Height(height)
-    , m_Framebuffer({{{TextureType::COLOR, RHIFormat::R8G8B8_UNORM},
-                      {TextureType::DEPTH, RHIFormat::D16_UNORM}},
-                     width,
-                     height})
-    , m_PostEffectsFramebuffer({{{TextureType::COLOR, RHIFormat::R8G8B8_UNORM},
-                                 {TextureType::DEPTH, RHIFormat::D16_UNORM}},
-                                width,
-                                height}) {
+{
+    m_Framebuffers["Main"] = {
+        {
+            {
+                {TextureType::COLOR, RHIFormat::R8G8B8_UNORM},
+                {TextureType::DEPTH, RHIFormat::D16_UNORM}
+            },
+            width,
+            height
+        }
+    };
+    m_Framebuffers["PostEffects"] = {
+        {
+            {
+                {TextureType::COLOR, RHIFormat::R8G8B8_UNORM},
+                {TextureType::DEPTH, RHIFormat::D16_UNORM}
+            },
+            width,
+            height
+        }
+    };
     InitResources();
 }
 
@@ -29,8 +42,8 @@ void RenderPasses::InitResources() {
 }
 
 void RenderPasses::Resize(u32 width, u32 height) {
-    m_Framebuffer.Resize(width, height);
-    m_PostEffectsFramebuffer.Resize(width, height);
+    m_Framebuffers["Main"].Resize(width, height);
+    m_Framebuffers["PostEffects"].Resize(width, height);
     m_Renderer.Resize(width, height);
 }
 
@@ -43,25 +56,29 @@ void RenderPasses::BeginScene(Scene& scene) {
 }
 
 void RenderPasses::OnRender(const glm::mat4& proj, const glm::mat4& view) {
-    m_Framebuffer.Bind();
+    m_Framebuffers["Main"].Bind();
     ColorPass(proj, view);
-    m_Framebuffer.Unbind();
-    m_PostEffectsFramebuffer.Bind();
+    m_Framebuffers["Main"].Unbind();
+    m_Framebuffers["PostEffects"].Bind();
     Renderer::Clear({1.0f, 1.0f, 1.0f, 1.0f}, ClearFlags::COLOR);
     Renderer::Cull(CullMode::BOTH);
     Renderer::DepthTest(false);
 
     m_ScreenShader.Bind();
     m_ScreenShader.SetUniform1i("screenTexture", 0);
-    m_Framebuffer.BindColorAttachment(0, 0);
+    m_Framebuffers["Main"].BindColorAttachment(0, 0);
     m_Renderer.DrawIndexed(m_ScreenSurface.VAO, m_ScreenSurface.EBO, DrawType::TRIANGLE);
     m_ScreenShader.Unbind();
-    m_PostEffectsFramebuffer.Unbind();
+    m_Framebuffers["PostEffects"].Unbind();
     Renderer::Clear({1.0f, 1.0f, 1.0f, 1.0f}, ClearFlags::COLOR);
 }
 
+std::map<std::string, Framebuffer>& RenderPasses::GetFramebuffers() {
+    return m_Framebuffers;
+}
+
 void RenderPasses::ImGuiFrameImage() {
-    Framebuffer::ImGuiImage(m_PostEffectsFramebuffer);
+    Framebuffer::ImGuiImage(m_Framebuffers["PostEffects"]);
 }
 
 void RenderPasses::ImGuiBegin() const {

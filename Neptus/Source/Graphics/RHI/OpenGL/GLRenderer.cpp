@@ -20,7 +20,7 @@ void GLAPIENTRY glDebugOutput(GLenum source, GLenum type, u32 id,
 }
 
 Renderer::Renderer() {
-    ImGui_ImplOpenGL3_Init();
+    //ImGui_ImplOpenGL3_Init();
 
     int version =
         gladLoadGL(reinterpret_cast<GLADloadfunc>(SDL_GL_GetProcAddress));
@@ -41,7 +41,7 @@ Renderer::Renderer() {
 }
 
 Renderer::~Renderer() {
-    ImGui_ImplOpenGL3_Shutdown();
+    //ImGui_ImplOpenGL3_Shutdown();
 }
 
 void Renderer::ImGuiBegin() const {

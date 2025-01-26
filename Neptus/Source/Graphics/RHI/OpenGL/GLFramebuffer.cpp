@@ -171,6 +171,18 @@ void Framebuffer::Resize(u32 width, u32 height) {
     Unbind();
 }
 
+std::vector<Texture2D>& Framebuffer::GetColorAttachments() {
+    return m_ColorAttachments;
+}
+
+std::vector<Texture2D>& Framebuffer::GetDepthAttachments() {
+    return m_DepthAttachments;
+}
+
+std::vector<Texture2D>& Framebuffer::GetDepthStencilAttachments() {
+    return m_DepthStencilAttachments;
+}
+
 void Framebuffer::ImGuiImage(Framebuffer& framebuffer) {
     Texture2D::ImGuiImage(framebuffer.m_ColorAttachments[0]);
 }

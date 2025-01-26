@@ -11,8 +11,6 @@ Window::Window(const WindowProps& props) {
 }
 
 Window::~Window() {
-    ImGui_ImplSDL2_Shutdown();
-    ImGui::DestroyContext();
     SDL_DestroyWindow(m_Handle);
     SDL_Quit();
 }
@@ -36,21 +34,13 @@ bool Window::Init(const WindowProps& props) {
                                 SDL_WINDOWPOS_CENTERED, props.Width,
                                 props.Height, flags);
 
+#ifdef NEPTUS_BUILD_RENDERSYSTEM_GL
+    SDL_GLContext glContext = SDL_GL_CreateContext(m_Handle);
+#endif
+
     if (!m_Handle) {
         return false;
     }
-
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-
-#ifdef NEPTUS_BUILD_RENDERSYSTEM_GL
-    SDL_GLContext glContext = SDL_GL_CreateContext(m_Handle);
-    ImGui_ImplSDL2_InitForOpenGL(m_Handle, glContext);
-#endif
 
     return true;
 }

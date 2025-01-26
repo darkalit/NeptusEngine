@@ -37,7 +37,7 @@ public:
     Mesh& operator=(Mesh&& other) noexcept;
 
     std::string Name = {};
-    std::pair<std::string, Texture*> Texture = {{}, nullptr};
+    std::pair<std::string, SharedPtr<Texture>> Texture = {{}, nullptr};
     VertexArrayBuffer VAO;
     VertexBuffer VBO;
     IndexBuffer EBO;

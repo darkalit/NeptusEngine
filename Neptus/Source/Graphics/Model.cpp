@@ -190,8 +190,8 @@ void Model::Load(ResourceManager& resourceManager, const std::string& filepath) 
                 options.FlipY = true;
                 std::string textureFilepath =
                     (path.parent_path() / material.diffuse_texname).string();
-                auto& texture2d = resourceManager.AddTexture2D(textureFilepath, {}, options);
-                mesh.Texture = std::make_pair("textureDiffuse", &texture2d);
+                auto texture2d = resourceManager.AddTexture2D(textureFilepath, {}, options);
+                mesh.Texture = std::make_pair("textureDiffuse", texture2d);
             }
         }
     }

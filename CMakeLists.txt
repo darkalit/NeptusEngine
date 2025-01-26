@@ -4,12 +4,15 @@ project("NeptusEngine" LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-option(NEPTUS_ENGINE_SHARED TRUE)
+unset(NEPTUS_USE_SDL CACHE)
+unset(NEPTUS_BUILD_RENDERSYSTEM_GL CACHE)
+unset(NEPTUS_SHARED CACHE)
 option(NEPTUS_USE_SDL "Use and build an SDL as window backend" TRUE)
 option(NEPTUS_BUILD_RENDERSYSTEM_GL "Build OpenGL 3+ RenderSystem" TRUE)
+option(NEPTUS_SHARED "Build engine as shared library" TRUE)
 
-if(NEPTUS_ENGINE_SHARED)
-    add_compile_definitions(NEPTUS_ENGINE_SHARED)
+if(NEPTUS_SHARED)
+    add_compile_definitions(NEPTUS_SHARED)
 endif()
 
 if (NEPTUS_BUILD_RENDERSYSTEM_GL)

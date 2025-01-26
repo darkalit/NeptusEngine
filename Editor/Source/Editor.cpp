@@ -9,32 +9,32 @@
 #include "Scene/Components/ModelComponent.hpp"
 #include "Utils/Clock.hpp"
 #include "Widgets.hpp"
+#include "ImGui.hpp"
 
 #include <glm/gtc/type_ptr.inl>
 
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 
-#include <imgui.h>
-#include <imgui_impl_sdl2.h>
-
 namespace Neptus {
 void Editor::Run() {
+    ImGuiInit(m_Window);
+
     m_ResourceManager.AddModel("Neptus/Assets/Models/hl2gordon_freeman/gordon.obj");
     m_ResourceManager.AddModel("Neptus/Assets/Models/backpack/backpack.obj");
 
     auto& scene = m_SceneManager.CreateScene("main");
-    auto _ = scene.CreateEntity("gordon");
+    auto _ = scene->CreateEntity("gordon");
     _.AddComponent<Components::TransformComponent>();
     _.GetComponent<Components::TransformComponent>().Translation.y += 60.0f;
-    _.AddComponent<Components::ModelComponent>(&m_ResourceManager.GetModel("Neptus/Assets/Models/hl2gordon_freeman/gordon.obj"));
+    _.AddComponent<Components::ModelComponent>(m_ResourceManager.GetModel("Neptus/Assets/Models/hl2gordon_freeman/gordon.obj"));
 
-    _ = scene.CreateEntity("backpack");
+    _ = scene->CreateEntity("backpack");
     _.AddComponent<Components::TransformComponent>();
     _.GetComponent<Components::TransformComponent>().Scale *= 6.0f;
-    _.AddComponent<Components::ModelComponent>(&m_ResourceManager.GetModel("Neptus/Assets/Models/backpack/backpack.obj"));
+    _.AddComponent<Components::ModelComponent>(m_ResourceManager.GetModel("Neptus/Assets/Models/backpack/backpack.obj"));
 
-    m_SceneManager.SwitchScene(scene.GetID());
+    m_SceneManager.SwitchScene(scene->GetID());
 
     f32 width = m_Window.GetWidth(), height = m_Window.GetHeight();
 
@@ -51,7 +51,7 @@ void Editor::Run() {
         m_Updates++;
 
         while (SDL_PollEvent(&event)) {
-            ImGui_ImplSDL2_ProcessEvent(&event);
+            ImGuiProcessEvent(event);
             switch (event.type) {
             case SDL_WINDOWEVENT:
                 if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
@@ -114,16 +114,18 @@ void Editor::Run() {
         }
 
         m_Window.HideMouse(m_CameraMove);
-        m_RenderPasses.BeginScene(m_SceneManager.GetCurrentScene());
+        m_RenderPasses.BeginScene(*m_SceneManager.GetCurrentScene());
         m_RenderPasses.OnRender(m_Camera.GetProj(width / height),  m_Camera.GetView());
 
-        m_RenderPasses.ImGuiBegin();
+        ImGuiBegin();
+
         ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
 
         if (ImGui::Begin("Viewport")) {
             width = ImGui::GetContentRegionAvail().x;
             height = ImGui::GetContentRegionAvail().y;
-            m_RenderPasses.ImGuiFrameImage();
+            ImGuiImage(m_RenderPasses.GetFramebuffers()["PostEffects"]
+                           .GetColorAttachments()[0]);
 
             // TODO: fix Window cannot be moved
             m_CameraMove = ImGui::IsWindowFocused() && ImGui::IsMouseDown(0);
@@ -149,11 +151,13 @@ void Editor::Run() {
 
         if (ImGui::Begin("Scene Explorer")) {
             m_SceneManager.GetCurrentScene()
-                .GetAllEntitiesWith<Components::IDComponent,
+                ->GetAllEntitiesWith<Components::IDComponent,
                                      Components::TagComponent>()
                 .each([this](const auto entity, auto& idComponent, auto& tagComponent) {
                     if (ImGui::SelectableInput(std::to_string(static_cast<u64>(idComponent.ID)).c_str(), m_ChosenEntity == entity, &tagComponent.Tag)) {
-                        m_ChosenEntity = m_SceneManager.GetCurrentScene().GetEntityByHandle(entity);
+                        m_ChosenEntity =
+                            m_SceneManager.GetCurrentScene()->GetEntityByHandle(
+                                entity);
                     }
                 });
         }
@@ -186,10 +190,12 @@ void Editor::Run() {
             }
         }
         ImGui::End();
-        m_RenderPasses.ImGuiEnd();
+        ImGuiEnd();
 
         m_Window.OnUpdate();
     }
+
+    ImGuiDestroy();
 }
 } // namespace Neptus
 

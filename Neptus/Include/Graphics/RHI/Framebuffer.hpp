@@ -37,6 +37,10 @@ public:
 
     void Resize(u32 width, u32 height);
 
+    std::vector<Texture2D>& GetColorAttachments();
+    std::vector<Texture2D>& GetDepthAttachments();
+    std::vector<Texture2D>& GetDepthStencilAttachments();
+
     u32 GetWidth() const {
         return m_Width;
     }

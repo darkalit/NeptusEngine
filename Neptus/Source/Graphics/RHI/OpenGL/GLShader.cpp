@@ -94,7 +94,10 @@ u32 Compile(const std::map<ShaderType, std::string>& sources) {
 
         std::string message;
         message += "ERROR::GRAPHICS::SHADER::PROGRAM::LINK_FAILED\n";
-        message += infoLog.data();
+
+        if (length > 0) {
+            message += infoLog.data();
+        }
         std::cout << message << '\n';
 
         return 0;

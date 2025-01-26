@@ -48,6 +48,14 @@ u32 LoadTexture(const void* data, u32 width, u32 height, u32 channelCount,
     return handle;
 }
 
+RHIFormat Texture::GetFormat() const {
+    return m_Properties.Format;
+}
+
+TextureHandle Texture::GetHandle() const {
+    return reinterpret_cast<void*>(static_cast<intptr_t>(m_Handle));
+}
+
 Texture2D::Texture2D(u32 width, u32 height, TextureProps props) {
     m_Width = width;
     m_Height = height;

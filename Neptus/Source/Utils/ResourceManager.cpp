@@ -1,18 +1,19 @@
 #include "Utils/ResourceManager.hpp"
 
 namespace Neptus {
-Graphics::Shader& ResourceManager::AddShader(const std::string& filepath) {
-    auto shader = Graphics::Shader(filepath);
-    m_Shaders.emplace(filepath, std::move(shader));
+SharedPtr<Graphics::Shader>
+ResourceManager::AddShader(const std::string& filepath) {
+    m_Shaders.try_emplace(filepath, CreateSharedPtr<Graphics::Shader>(filepath));
 
-    return m_Shaders[filepath];
+    return m_Shaders.at(filepath);
 }
 
-Graphics::Shader& ResourceManager::GetShader(const std::string& name) {
+SharedPtr<Graphics::Shader>
+ResourceManager::GetShader(const std::string& name) {
     return m_Shaders.at(name);
 }
 
-Graphics::Texture2D&
+SharedPtr<Graphics::Texture2D>
 ResourceManager::AddTexture2D(const std::string& filepath,
                               Graphics::TextureProps props,
                               Graphics::TextureLoadOptions loadOptions) {
@@ -20,24 +21,26 @@ ResourceManager::AddTexture2D(const std::string& filepath,
         return pair->second;
     }
 
-    auto texture2d = Graphics::Texture2D(filepath, props, loadOptions);
-    m_Textures2D.emplace(filepath, std::move(texture2d));
+    m_Textures2D.try_emplace(filepath, CreateSharedPtr<Graphics::Texture2D>(
+                                           filepath, props, loadOptions));
 
-    return m_Textures2D[filepath];
+    return m_Textures2D.at(filepath);
 }
 
-Graphics::Texture2D& ResourceManager::GetTexture2D(const std::string& name) {
+SharedPtr<Graphics::Texture2D>
+ResourceManager::GetTexture2D(const std::string& name) {
     return m_Textures2D.at(name);
 }
 
-Graphics::Model& ResourceManager::AddModel(const std::string& filepath) {
-    auto model = Graphics::Model(*this, filepath);
-    m_Models.emplace(filepath, std::move(model));
+SharedPtr<Graphics::Model>
+ResourceManager::AddModel(const std::string& filepath) {
+    m_Models.try_emplace(filepath,
+                         CreateSharedPtr<Graphics::Model>(*this, filepath));
 
-    return m_Models[filepath];
+    return m_Models.at(filepath);
 }
 
-Graphics::Model& ResourceManager::GetModel(const std::string& name) {
+SharedPtr<Graphics::Model> ResourceManager::GetModel(const std::string& name) {
     return m_Models.at(name);
 }
 

@@ -9,6 +9,8 @@
 
 namespace Neptus {
 namespace Graphics {
+using TextureHandle = void*;
+
 enum class TextureFilter : u8 {
     NONE,
     LINEAR,
@@ -52,7 +54,8 @@ public:
     virtual void Unbind(u32 slot = 0) const = 0;
     virtual std::string GetFilepath() const = 0;
     virtual TextureType GetTextureType() const = 0;
-    RHIFormat GetFormat() const { return m_Properties.Format; };
+    RHIFormat GetFormat() const;
+    TextureHandle GetHandle() const;
 
     static u32 BitsToChannelCount(u32 bits);
     static u32 BitsFromFormat(RHIFormat format);

@@ -18,7 +18,7 @@ public:                                                                        \
 private:
 
 namespace Neptus {
-enum NP_API AssetFlag : u16 {
+enum AssetFlag : u16 {
     NONE = 0,
     MISSING = BIT(0),
     INVALID = BIT(1),
@@ -26,7 +26,7 @@ enum NP_API AssetFlag : u16 {
     LOADED = BIT(3),
 };
 
-enum class NP_API AssetType : u16 {
+enum class AssetType : u16 {
     Unknown,
     Shader,
     Texture,

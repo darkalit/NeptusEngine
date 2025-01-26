@@ -22,6 +22,8 @@ public:
     void BeginScene(Scene& scene);
     void OnRender(const glm::mat4& proj, const glm::mat4& view);
 
+    std::map<std::string, Framebuffer>& GetFramebuffers();
+
     void ImGuiFrameImage();
     void ImGuiBegin() const;
     void ImGuiEnd() const;
@@ -39,8 +41,7 @@ protected:
 
     ScreenSurface m_ScreenSurface;
 
-    Framebuffer m_Framebuffer;
-    Framebuffer m_PostEffectsFramebuffer;
+    std::map<std::string, Framebuffer> m_Framebuffers;
     Shader m_ScreenShader;
     Shader m_ModelColorShader;
 };

@@ -13,11 +13,11 @@ class NP_API Scene : public Asset {
 public:
     Scene() = default;
     Scene(const std::string& name);
-    Scene(const Scene&) = delete;
+    // Scene(const Scene&) = delete;
     Scene(Scene&& other) noexcept;
     ~Scene() override;
 
-    Scene& operator=(const Scene&) = delete;
+    // Scene& operator=(const Scene&) = delete;
     Scene& operator=(Scene&& other) noexcept;
 
     Entity CreateEntity(const std::string& name = "");
